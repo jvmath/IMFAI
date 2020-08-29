@@ -5,21 +5,21 @@ ui <- navbarPage("IMFAI", theme = shinytheme("darkly"),
   tabPanel("Juros Simples",
     sidebarLayout(
       sidebarPanel(
-        numericInput("c",
+        numericInput("cJS",
           "Valor Inicial",
           0,00
         ),
-        numericInput("i",
+        numericInput("iJS",
           "Taxa de Juros (%)",
           0,00
         ),
-        numericInput("t",
+        numericInput("tJS",
           "Tempo da Aplicação",
           0,00
         )
       ),
       mainPanel(
-               
+        textOutput("resultadoJS")
       )
     )
   ),
