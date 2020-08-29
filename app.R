@@ -19,7 +19,7 @@ ui <- navbarPage("IMFAI", theme = shinytheme("darkly"),
         )
       ),
       mainPanel(
-        textOutput("resultadoJS")
+        h1(textOutput("resultadoJS"))
       )
     )
   ),
