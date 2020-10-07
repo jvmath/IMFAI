@@ -103,7 +103,9 @@ server <- function(input, output) {
     cat("A taxa de juros utilizada é =", input$i,"%")
   })
     
-    
+  {output$resultadoJS <- renderText({
+    input$tJS*(input$iJS/100)*input$cJS
+  })}
     
   }
 
