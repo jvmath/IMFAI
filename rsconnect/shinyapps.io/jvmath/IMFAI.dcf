@@ -5,8 +5,8 @@ account: jvmath
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2723553
-bundleId: 3711367
+bundleId: 3891769
 url: https://jvmath.shinyapps.io/IMFAI/
-when: 1602049382.05027
+when: 1606072166.30126
 asMultiple: FALSE
 asStatic: FALSE
