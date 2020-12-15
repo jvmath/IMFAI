@@ -98,8 +98,11 @@ ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
                             )
                           )
                  ),
+                 tabPanel("Sistema Misto",
+                          p("Pagina criada para o projeto TCC...") ),
                  tabPanel("Sobre", icon = icon("comment", lib = "glyphicon"),
                           includeMarkdown("sobre.md")),
+                 
                  tabPanel("Analise Financeira",
                           p("Pagina criada para o projeto TCC...") )
 )
