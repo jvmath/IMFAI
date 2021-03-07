@@ -5,9 +5,14 @@ library(data.table)
 library(png)
 library(markdown)
 ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
-                 tabPanel("Inicio" 
-                          ),
-                          ##
+                 tabPanel("Inic",
+                        HTML('<iframe width="560" height="315"
+                             src="https://www.youtube.com/embed/Ka2pWqXS1WA"
+                             frameborder="0"
+                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                             allowfullscreen></iframe>')
+                 ),
+                 ##
                  tabPanel("Juros Simples",
                           sidebarLayout(
                             sidebarPanel(
@@ -98,11 +103,8 @@ ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
                             )
                           )
                  ),
-                 tabPanel("Sistema Misto",
-                          p("Pagina criada para o projeto TCC...") ),
                  tabPanel("Sobre", icon = icon("comment", lib = "glyphicon"),
                           includeMarkdown("sobre.md")),
-                 
                  tabPanel("Analise Financeira",
                           p("Pagina criada para o projeto TCC...") )
 )
@@ -143,7 +145,7 @@ server <- function(input, output) {
         "Amortização"=c("-", rep(A,input$k), sum(rep(A,input$k))), 
         "Juros"=c("-", J, sum(J)), 
         "Prestação"=c("-", P, sum(P)), 
-        "Dívida"=c(D0, D, "Total"))
+        "Divida"=c(D0, D, "Total"))
       result <- as.data.table(result)
       DT::datatable(result, extensions = 'Buttons', options = list(
         dom = 'Bfrtip',
@@ -156,7 +158,7 @@ server <- function(input, output) {
   })
   
   output$msg <-renderText({
-    cat("A taxa de juros utilizada é =", input$i,"%")
+    cat("A taxa de juros utilizada é  =", input$i,"%")
   })
   
   {output$resultadoJS <- renderText({
@@ -202,7 +204,7 @@ server <- function(input, output) {
                            "Prestação"=c("-", rep(P,input$kp), sum(rep(P,input$kp))), 
                            "Juros"=c("-", J, sum(J)), 
                            "Amortização"=c("-", A, sum(A)), 
-                           "Dívida"=c(D0, D  , "-"))
+                           "Divida"=c(D0, D  , "-"))
       result <- as.data.table(result)
       DT::datatable(result, extensions = 'Buttons', options = list(
         dom = 'Bfrtip',
@@ -214,7 +216,7 @@ server <- function(input, output) {
     
   })
   output$resultadoP <- renderText({
-    paste("A taxa de juros utilizada é ", input$ip,"%")
+    paste("A taxa de juros utilizada  é ", input$ip,"%")
   })
   
 }
