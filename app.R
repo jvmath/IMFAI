@@ -6,7 +6,11 @@ library(png)
 library(markdown)
 ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
                  tabPanel("Inic",
-                        HTML('<iframe width="560" height="315" src="https://www.youtube.com/embed/bJgFxZwu8SQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></center>'
+                        HTML('<iframe width="560"
+                             height="315" src="https://www.youtube.com/embed/bJgFxZwu8SQ"
+                             frameborder="0" allow="accelerometer; autoplay; clipboard-write;
+                             encrypted-media; gyroscope; picture-in-picture" allowfullscreen>
+                             </iframe>'
                                )
                  ),
                  ##
@@ -95,7 +99,6 @@ ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
             
                             ),
                             mainPanel(
-                              textOutput("NoValue"),
                               DT::dataTableOutput("resultadoPR")
                             )
                           )
@@ -122,7 +125,6 @@ ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
                               ),
                             ),
                             mainPanel(
-                              textOutput("Valuefinal"),
                               DT::dataTableOutput("resultadoanalise")
                             )
                           )
@@ -150,7 +152,6 @@ ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
                               ),
                             ),
                             mainPanel(
-                              textOutput("Valuefinal1"),
                               DT::dataTableOutput("resultadoanalise1")
                             )
                           )
@@ -175,7 +176,6 @@ ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
                               
                             ),
                             mainPanel(
-                              textOutput("NoValue2"),
                               DT::dataTableOutput("resultadoMisto")
                             )
                           )
@@ -187,6 +187,7 @@ ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
 
 
 server <- function(input, output) {
+  
   output$resultadoSA <- DT::renderDataTable({
     if(input$value=="0"||input$i=="0"||input$k=="0"){
       
@@ -404,80 +405,85 @@ server <- function(input, output) {
     }
   })
   
- 
-  
-  
-  
   output$resultadoMisto <- DT::renderDataTable({
 
-    #sac
     if(input$emprestimoM=="0"||input$jurosM=="0"||input$tempoM=="0"){
       
       as.data.table(paste("Preencha os valores da coluna lateral"))
-      
-      
-    }else{
-      
-      Dsac <- matrix(nrow = input$tempoM, ncol = 1)
-      Psac <- matrix(nrow = input$tempoM, ncol = 1)
-      Jsac <- matrix(nrow = input$tempoM, ncol = 1)
-      for(l in 1:((input$tempoM)-1)){
-        Asac <- input$emprestimoM/input$tempoM
-        D0 <- input$emprestimoM
-        Dsac[1,] <- D0-Asac
-        Dsac[l+1,] <- D[l,]-Asac
-        
-        Jsac[1,] <- D0*(input$jurosM/100)
-        Jsac[l+1,] <- Dsac[l,]*(input$jurosM/100)
-        
-        Psac[l,] <- Jsac[l,]+Asac
-        Psac[input$tempoM,] <- Jsac[input$tempoM,]+Asac
-      }
-      
-      Asac <- round(Asac,2)
-      Jsac <- round(Jsac,2)
-      Dsac <- round(Dsac,2)
-      Psac <- round(Psac,2)
-      
     
+    } else {
       
-      Dprice <- matrix(nrow = input$tempoM, ncol = 1)
-      Aprice <- matrix(nrow = input$tempoM, ncol = 1)
-      Jprice <- matrix(nrow = input$tempoM, ncol = 1)
-      Pprice <- input$emprestimoM*(((1+(input$jurosM/100))^input$tempoM)*(input$jurosM/100))/(((1+(input$jurosM/100))^input$tempoM)-1)
+      # SAC
+      
+      sacD <- matrix(nrow = input$tempoM, ncol = 1)
+      sacP <- matrix(nrow = input$tempoM, ncol = 1)
+      sacJ <- matrix(nrow = input$tempoM, ncol = 1)
+      sacA <- input$emprestimoM/input$tempoM
       D0 <- input$emprestimoM
-      Jprice[1]<- D0*(input$jurosM/100)
-      Aprice[1]<- Pprice-Jprice[1]
-      Dprice[1]<- D0-Aprice[1]
-      for(l in 2:((input$tempoM))){
-        Jprice[l]=Dprice[l-1]*(input$jurosM/100)
-        Aprice[l,] <- Pprice-Jprice[l,]
-        Dprice[l,] <- Dprice[l-1,]-Aprice[l,]
+      sacD[1,] <- D0-sacA
+      for(l in 1:((input$tempoM)-1)){
+        sacD[l+1,] <- sacD[l,]-sacA
+        sacJ[1,] <- D0*(input$jurosM/100)
+        sacJ[l+1,] <- sacD[l,]*(input$jurosM/100)
+        sacP[l,] <- sacJ[l,]+sacA
+        sacP[input$tempoM,] <- sacJ[input$tempoM,]+sacA
       }
-      Aprice <- round(Aprice,2)
-      Jprice <- round(Jprice,2)
-      Dprice <- round(Dprice,2)
-      Pprice <- round(Pprice,2)
+      sacA <- round(sacA,2)
+      sacJ <- round(sacJ,2)
+      sacD <- round(sacD,2)
+      sacP <- round(sacP,2)
       
-      Amisto <- (Aprice + Asac)/2
-      Jmisto <- (Jmisto + Jsac)/2
-      Dmisto <- (Dmisto + Dsac)/2
-      Pmisto <- (Pprice + Psac)/2
+      # PRICE
+      
+      priceD <- matrix(nrow = input$tempoM, ncol = 1)
+      priceA <- matrix(nrow = input$tempoM, ncol = 1)
+      priceJ <- matrix(nrow = input$tempoM, ncol = 1)
+      priceP <- input$emprestimoM*(((1+(input$jurosM/100))^input$tempoM)*(input$jurosM/100))/(((1+(input$jurosM/100))^input$tempoM)-1)
+      
+      priceJ[1]<- D0*(input$jurosM/100)
+      priceA[1]<- priceP-priceJ[1]
+      priceD[1]<- D0-priceA[1]
+      for(l in 2:((input$tempoM))){
+        priceJ[l]=priceD[l-1]*(input$jurosM/100)
+        priceA[l,] <- priceP-priceJ[l,]
+        priceD[l,] <- priceD[l-1,]-priceA[l,]
+      }
+      priceA <- round(priceA,2)
+      priceJ <- round(priceJ,2)
+      priceD <- round(priceD,2)
+      priceP <- round(priceP,2)
+      
+      # MISTO
+      
+      Amisto <- matrix(nrow = input$tempoM, ncol = 1)
+      Jmisto <- matrix(nrow = input$tempoM, ncol = 1)
+      Dmisto <- matrix(nrow = input$tempoM, ncol = 1)
+      Pmisto <- matrix(nrow = input$tempoM, ncol = 1)
+      
+      for (i in 1:input$tempoM) {
+        Amisto[i,] <- (sacA + priceA[i,])/2
+        Jmisto[i,] <- (sacJ[i,] + priceJ[i,])/2
+        Pmisto[i,] <- (sacP[i,] + priceP)/2
+        if (i == 1)
+          Dmisto[i,] <- D0 - Amisto[i,]
+        else
+          Dmisto[i,] <- Dmisto[i-1,] - Amisto[i,]
+      }
+      
+      Amisto <- round(Amisto,2)
+      Jmisto <- round(Jmisto,2)
+      Dmisto <- round(Dmisto,2)
+      Pmisto <- round(Pmisto,2)
       
       Epoca <- seq(1:input$tempoM)
       
       resultMisto <- data.frame("Parcela"=c(0, Epoca, "Soma"), 
-                           "Prestação"=c("-", rep(Pmisto,input$tempoM), sum(rep(Pmisto,input$tempoM))), 
-                           "Juros"=c("-", Jmisto, sum(Jmisto)), 
-                           "Amortização"=c("-", Amisto, sum(Amisto)), 
-                           "Divida"=c(D0, Dmisto  , "-"))
+                                "Prestação"=c("-", Pmisto, sum(rep(Pmisto,input$tempoM))), 
+                                "Juros"=c("-", Jmisto, sum(Jmisto)), 
+                                "Amortização"=c("-", Amisto, sum(Amisto)), 
+                                "Divida"=c(D0, Dmisto, "-"))
+      
       resultMisto <- as.data.table(resultMisto)
-      
-      DT::datatable(resultMisto, extensions = 'Buttons', options = list(
-        dom = 'Bfrtip',
-        buttons = c('pageLength','copy', 'csv', 'excel', 'pdf', 'print')
-      ))
-      
     }
   })
       
