@@ -5,7 +5,7 @@ library(data.table)
 library(png)
 library(markdown)
 ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
-                 tabPanel("Inic",
+                 tabPanel("Inicio",
                         HTML('<iframe width="560"
                              height="315" src="https://www.youtube.com/embed/bJgFxZwu8SQ"
                              frameborder="0" allow="accelerometer; autoplay; clipboard-write;
@@ -103,7 +103,31 @@ ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
                             )
                           )
                  ),
-                 tabPanel("Planjemaneto Financeiro",
+                 tabPanel("Sistema Misto",
+                          sidebarLayout(
+                            sidebarPanel(
+                              numericInput("emprestimoM",
+                                           "Valor do Emprestimo",
+                                           0
+                                           
+                              ),
+                              numericInput("jurosM",
+                                           "Taxa de Juros (%)",
+                                           0
+                              ),
+                              numericInput("tempoM",
+                                           "Tempo da Aplicação",
+                                           0
+                              ),
+                              
+                            ),
+                            mainPanel(
+                              DT::dataTableOutput("resultadoMisto")
+                            )
+                          )
+                 ),
+                 
+                 tabPanel("Investimento",
                           sidebarLayout(
                             sidebarPanel(
                               numericInput("valuex",
@@ -130,7 +154,8 @@ ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
                           )
                  ),
                  
-                 tabPanel("Analise Financeira2",
+                 
+                 tabPanel("Investimento 2",
                           sidebarLayout(
                             sidebarPanel(
                               numericInput("valuexa",
@@ -157,29 +182,7 @@ ui <- navbarPage("IMFAI", theme = shinytheme("sandstone"),
                           )
                  ),
                  
-                 tabPanel("Sistema Misto",
-                          sidebarLayout(
-                            sidebarPanel(
-                              numericInput("emprestimoM",
-                                           "Valor do Emprestimo",
-                                           0
-                                           
-                              ),
-                              numericInput("jurosM",
-                                           "Taxa de Juros (%)",
-                                           0
-                              ),
-                              numericInput("tempoM",
-                                           "Tempo da Aplicação",
-                                           0
-                              ),
-                              
-                            ),
-                            mainPanel(
-                              DT::dataTableOutput("resultadoMisto")
-                            )
-                          )
-                          ),
+                
                           
                  tabPanel("Sobre", icon = icon("comment", lib = "glyphicon"),
                           includeMarkdown("sobre.md"))
